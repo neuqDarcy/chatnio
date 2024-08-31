@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"time"
 )
 
 func (c *ChatInstance) GetChatEndpoint(props *adaptercommon.ChatProps) string {
@@ -105,7 +106,9 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, c
 	}
 
 	isCompletionType := props.Model == globals.GPT3TurboInstruct
-
+	startTime := time.Now()
+	requestBody := c.GetChatBody(props, true)
+	fmt.Printf("%s 请求上游 url %s \n header %s \nbody %s\n\n\n", time.Now(), c.GetChatEndpoint(props), c.GetHeader(), requestBody)
 	ticks := 0
 	err := utils.EventScanner(&utils.EventScannerProps{
 		Method:  "POST",
@@ -113,6 +116,8 @@ func (c *ChatInstance) CreateStreamChatRequest(props *adaptercommon.ChatProps, c
 		Headers: c.GetHeader(),
 		Body:    c.GetChatBody(props, true),
 		Callback: func(data string) error {
+
+			fmt.Printf("时延 %v \n response data: %s\n", time.Since(startTime), data)
 			ticks += 1
 
 			partial, err := c.ProcessLine(data, isCompletionType)
