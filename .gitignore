@@ -28,3 +28,4 @@ config
 
 # for opencommit
 .env
+chatnio

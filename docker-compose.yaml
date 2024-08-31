@@ -15,7 +15,7 @@ services:
     expose:
       - "3306"
     volumes:
-        - ./db:/var/lib/mysql
+        - ~/data/db:/var/lib/mysql
     networks:
       - chatnio-network
 
@@ -28,7 +28,7 @@ services:
     expose:
       - "6379"
     volumes:
-      - ./redis:/data
+      - ~/data/redis:/data
     networks:
       - chatnio-network
 
@@ -59,9 +59,9 @@ services:
           REDIS_DB: 0
           SERVE_STATIC: "true"
       volumes:
-        - ./config:/config
-        - ./logs:/logs
-        - ./storage:/storage
+        - ~/data/config:/config
+        - ~/data/logs:/logs
+        - ~/data/storage:/storage
       networks:
         - chatnio-network
 
